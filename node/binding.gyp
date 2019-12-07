@@ -5,11 +5,10 @@
         "cflags_cc!": [ "-fno-exceptions" ],
         "sources": [
             "cppsrc/main.cpp",
-            "cppsrc/tokenizer_wrapper.cpp",
-            "cppsrc/hello.cpp"
+            "cppsrc/tokenizer_wrapper.cpp"            
         ],
         'include_dirs': [
-            "<!@(node -p \"require('node-addon-api').include\")"
+            "<!@(node -p \"require('node-addon-api').include\")",            
         ],
         'libraries': [],
         'dependencies': [

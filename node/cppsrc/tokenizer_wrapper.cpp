@@ -1,4 +1,6 @@
+#include "../../tokenizer/tokenizer.hpp"
 #include "tokenizer_wrapper.h"
+
 
 Napi::FunctionReference TokenizerWrapper::constructor;
 
@@ -8,7 +10,7 @@ Napi::Object TokenizerWrapper::Init(Napi::Env env, Napi::Object exports){
     
     Napi::Function func = DefineClass(env, "TokenizerWrapper",{
         InstanceMethod("segment",&TokenizerWrapper::segment),
-        InstanceMethod("segment_original",&TokenizerWrapper::segment_original),
+       /// InstanceMethod("segment_original",&TokenizerWrapper::segment_original),
     });
     
 
@@ -16,7 +18,7 @@ Napi::Object TokenizerWrapper::Init(Napi::Env env, Napi::Object exports){
     constructor.SuppressDestruct();
 
     exports.Set("segment",func);
-    exports.Set("segment_original",func);
+//    exports.Set("segment_original",func);
     return exports;
 }
 
@@ -36,15 +38,16 @@ Napi::Value TokenizerWrapper::segment(const Napi::CallbackInfo& info){
      this
         ->tokenizer_
         ->segment(info[0].As<Napi::String>(),info[1].As<Napi::Boolean>(), info[2].As<Napi::Number>());
-    return Napi::Array::From(info.Env(),answer);
+
+    Napi::Array results = Napi::Array::New(info.Env(),answer.size());
+    for (size_t i = 0; i < answer.size(); ++i)
+	{
+        results[i] = Napi::String::New(info.Env(),answer[i].text);
+        //Napi::String::New(info.Env(),r[i]);
+        //if VERBOSE: answer.to_string
+	}
+    return results;
 }
-
-
-
-Napi::Value TokenizerWrapper::segment_original(const Napi::CallbackInfo& info){
-    return Napi::String::New(info.Env(),"hello");
-}
-
 
 
 /*
